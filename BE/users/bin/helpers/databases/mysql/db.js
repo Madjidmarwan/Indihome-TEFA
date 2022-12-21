@@ -52,51 +52,6 @@ class DB {
     return result;
   }
 
-  async findManyPesan(table, userID) {
-    let db = await pool.getConnection(this.config);
-    if(validate.isEmpty(db)){
-      db = await pool.createConnectionPool(this.config);
-    }
-    const recordset = () => {
-      return new Promise((resolve, reject) => {
-        db.getConnection((err, connection) => {
-          if (err) {
-            let errorMessage;
-            if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-              errorMessage = 'Database connection was closed.';
-            }
-            if (err.code === 'ER_CON_COUNT_ERROR') {
-              errorMessage = 'Database has too many connections.';
-            }
-            if (err.code === 'ECONNREFUSED') {
-              errorMessage = 'Database connection was refused.';
-            }
-            connection.release();
-            reject(wrapper.error(errorMessage));
-          }
-          else {
-            connection.query(`SELECT * FROM ${table} WHERE userID = ${userID}`, (err, result) => {
-              if (err) {
-                connection.release();
-                reject(wrapper.error(err.message));
-              }
-              else {
-                connection.release();
-                resolve(wrapper.data(result));
-              }
-            });
-          }
-        });
-      });
-    };
-    const result = await recordset().then(result => {
-      return result;
-    }).catch(err => {
-      return err;
-    });
-    return result;
-  }
-
   async findOne(table, id) {
     let db = await pool.getConnection(this.config);
     if(validate.isEmpty(db)){
@@ -166,51 +121,6 @@ class DB {
           }
           else {
             connection.query(`SELECT * FROM ${table} WHERE username = '${username}'`, (err, result) => {
-              if (err) {
-                connection.release();
-                reject(wrapper.error(err.message));
-              }
-              else {
-                connection.release();
-                resolve(wrapper.data(result));
-              }
-            });
-          }
-        });
-      });
-    };
-    const result = await recordset().then(result => {
-      return result;
-    }).catch(err => {
-      return err;
-    });
-    return result;
-  }
-
-  async findOnePesan(table, id, userID) {
-    let db = await pool.getConnection(this.config);
-    if(validate.isEmpty(db)){
-      db = await pool.createConnectionPool(this.config);
-    }
-    const recordset = () => {
-      return new Promise((resolve, reject) => {
-        db.getConnection((err, connection) => {
-          if (err) {
-            let errorMessage;
-            if (err.code === 'PROTOCOL_CONNECTION_LOST') {
-              errorMessage = 'Database connection was closed.';
-            }
-            if (err.code === 'ER_CON_COUNT_ERROR') {
-              errorMessage = 'Database has too many connections.';
-            }
-            if (err.code === 'ECONNREFUSED') {
-              errorMessage = 'Database connection was refused.';
-            }
-            connection.release();
-            reject(wrapper.error(errorMessage));
-          }
-          else {
-            connection.query(`SELECT * FROM ${table} WHERE userID = '${userID}' AND id = ${id}`, (err, result) => {
               if (err) {
                 connection.release();
                 reject(wrapper.error(err.message));
