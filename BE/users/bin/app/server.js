@@ -6,7 +6,6 @@ const basicAuth = require('../auth/basic_auth_helper');
 const jwtAuth = require('../auth/jwt_auth_helper');
 const wrapper = require('../helpers/utils/wrapper');
 const userHandler = require('../modules/user/handlers/api_handler');
-const subscribeHandler = require('../modules/subscribed/handlers/api_handler');
 //const mongoConnectionPooling = require('../helpers/databases/mongodb/connection');
 
 function AppServer() {
@@ -50,12 +49,6 @@ function AppServer() {
   this.server.get('/api/v1/users/:id', userHandler.getOneUser);
   this.server.del('/api/v1/users/:id', userHandler.deleteOneUser);
   this.server.patch('/api/v1/users/:id', userHandler.updateOneUser);
-
-  //subscribe
-  this.server.post('/api/v1/subscribe', subscribeHandler.postOneSubscribe);
-  this.server.get('/api/v1/subscribe', subscribeHandler.getAllSubscribes);
-  this.server.get('/api/v1/subscribe/:id', subscribeHandler.getOneSubscribe);
-  this.server.del('/api/v1/subscribe/:id', subscribeHandler.deleteOneSubscribe);
   
   //Initiation
   //mongoConnectionPooling.init();
